@@ -12,7 +12,7 @@ import {
   FALLBACK_SPACEX,
   MAY_2024_STORM_DONKI,
   NOMINAL_DONKI
-} from './server/snapshots.ts';
+} from './server/snapshots';
 
 dotenv.config();
 
