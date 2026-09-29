@@ -234,7 +234,7 @@ export const TopBar: React.FC<TopBarProps> = ({
             className="flex items-center space-x-1.5 bg-white/[0.05] hover:bg-white/[0.09] px-2.5 py-1 rounded-full border border-white/[0.08] text-xs text-zinc-300 transition-colors"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399]" />
-            <span className="text-[11px] font-medium hidden sm:inline">Telemetry</span>
+            <span className="text-[11px] font-medium hidden sm:inline">System Health</span>
             <ChevronDown className="w-2.5 h-2.5 text-zinc-400" />
           </button>
 
