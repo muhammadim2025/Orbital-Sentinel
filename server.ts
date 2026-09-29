@@ -24,7 +24,7 @@ app.use(express.json());
 // GEMINI CONFIGURATION
 const GEMINI_MODEL = 'gemini-3.8-flash';
 const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY || '',
+  apiKey: process.env.GEMINI_API_KEY || 'unconfigured_key_for_vercel_builds',
   httpOptions: {
     headers: {
       'User-Agent': 'aistudio-build',
