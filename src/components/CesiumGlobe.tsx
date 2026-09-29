@@ -265,9 +265,17 @@ export const CesiumGlobe: React.FC<CesiumGlobeProps> = ({
     if (!showFleetOrbits || satellites.length === 0) return;
 
     // Pick key satellites across categories: Stations, representative debris, GPS, Starlink
+    let activeDebrisCount = 0;
     const representativeSats = satellites.filter(
-      (s, idx) => s.group === 'stations' || s.group.includes('debris') || idx % 12 === 0
-    ).slice(0, 16);
+      (s, idx) => {
+         if (s.group === 'stations' || s.group === 'gps-ops' || s.group === 'goes') return true;
+         if (s.group.includes('debris')) {
+           activeDebrisCount++;
+           return activeDebrisCount <= 15;
+         }
+         return idx % 35 === 0;
+      }
+    ).slice(0, 120);
 
     const newEntities: any[] = [];
 
@@ -275,10 +283,10 @@ export const CesiumGlobe: React.FC<CesiumGlobeProps> = ({
       const isDebris = sat.group.includes('debris');
       const isStation = sat.group === 'stations';
       const orbitColor = isDebris
-        ? Cesium.Color.fromCssColorString('rgba(244, 63, 94, 0.4)')
+        ? Cesium.Color.fromCssColorString('rgba(239, 68, 68, 0.4)')
         : isStation
         ? Cesium.Color.fromCssColorString('rgba(250, 204, 21, 0.5)')
-        : Cesium.Color.fromCssColorString('rgba(56, 189, 248, 0.25)');
+        : Cesium.Color.fromCssColorString('rgba(6, 182, 212, 0.25)');
 
       const { positions } = calculateOrbitPath(sat.satrec, simTime, 95, 120);
       const valid = positions.filter(p => Number.isFinite(p.x) && Number.isFinite(p.y) && Number.isFinite(p.z));
@@ -735,28 +743,35 @@ export const CesiumGlobe: React.FC<CesiumGlobeProps> = ({
         </div>
       </div>
 
-      {/* Color Code Legend Pill */}
-      <div className="absolute top-2 left-2 right-2 sm:left-auto sm:right-4 sm:top-4 z-20 bg-black/75 border border-white/10 backdrop-blur-2xl rounded-2xl sm:rounded-full px-3 py-1.5 text-[10px] sm:text-[11px] text-zinc-300 flex flex-wrap sm:flex-nowrap items-center justify-center sm:justify-start gap-3 sm:gap-3 shadow-xl font-mono">
-        <div className="flex items-center space-x-1.5" title="🟡 Gold: Giant space stations (ISS / Tiangong)">
-          <span className="w-2 h-2 rounded-full bg-yellow-400 shadow-[0_0_8px_#facc15]" />
-          <span className="text-zinc-300 font-semibold tracking-tight">Stations</span>
+      {/* Orbital Color Legend */}
+      <div className="absolute top-2 left-2 right-2 sm:left-auto sm:right-4 sm:top-4 z-20 bg-black/85 border border-white/10 backdrop-blur-2xl rounded-2xl px-4 py-3 shadow-2xl flex flex-col gap-2.5 max-w-sm pointer-events-auto transition-opacity">
+        <div className="flex justify-between items-center mb-1">
+          <span className="text-xs font-semibold text-zinc-100 tracking-wide uppercase">Orbital Legend</span>
+          <span className="text-[10px] text-zinc-500 font-mono">{satellites.length} FOV</span>
         </div>
-        <div className="flex items-center space-x-1.5" title="🔵 Cyan: Active working satellites (Starlink, GPS)">
-          <span className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]" />
-          <span className="text-zinc-300 font-semibold tracking-tight">Active</span>
+
+        <div className="flex flex-col gap-0.5">
+          <div className="flex items-center space-x-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-yellow-400 shadow-[0_0_8px_#facc15]" />
+            <span className="text-sm text-yellow-400 font-semibold tracking-tight">Gold — Space Stations</span>
+          </div>
+          <span className="text-[11px] text-zinc-400 pl-4.5 leading-snug">ISS, Tiangong and other major stations.</span>
         </div>
-        <div className="flex items-center space-x-1.5" title="🔴 Red: Dangerous space junk & debris">
-          <span className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_8px_#ef4444]" />
-          <span className="text-zinc-300 font-semibold tracking-tight">Debris</span>
+
+        <div className="flex flex-col gap-0.5 mt-1">
+          <div className="flex items-center space-x-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]" />
+            <span className="text-sm text-cyan-400 font-semibold tracking-tight">Cyan — Active Satellites</span>
+          </div>
+          <span className="text-[11px] text-zinc-400 pl-4.5 leading-snug">Starlink, GPS, weather and scientific satellites.</span>
         </div>
-        <span className="hidden sm:inline text-zinc-600">|</span>
-        <div className="flex items-center space-x-2">
-          <span className="text-zinc-400">{satellites.length} FOV</span>
-          <InfoButton
-            title="Orbital Color Legend"
-            description="🟡 Gold: Giant space stations (ISS, Tiangong). 🔵 Cyan: Active working satellites (Starlink, GPS, weather, science). 🔴 Red: Dangerous space junk & orbital debris clouds."
-            placement="bottom"
-          />
+
+        <div className="flex flex-col gap-0.5 mt-1">
+          <div className="flex items-center space-x-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_8px_#ef4444]" />
+            <span className="text-sm text-red-500 font-semibold tracking-tight">Red — Orbital Debris</span>
+          </div>
+          <span className="text-[11px] text-zinc-400 pl-4.5 leading-snug">Cosmos 2251, Iridium 33 and other dangerous debris.</span>
         </div>
       </div>
 
