@@ -578,15 +578,26 @@ export const RightPanel: React.FC<RightPanelProps> = ({
               </div>
             </div>
             <div className="flex flex-col space-y-2">
-              <input
-                type="password"
-                placeholder="AI Studio API Key (Optional)"
-                value={apiKey}
-                onChange={handleApiKeyChange}
-                className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder:text-zinc-600 focus:outline-none focus:border-sky-500/50 transition-colors"
-              />
+              <div className="relative">
+                <input
+                  type="password"
+                  placeholder="AI Studio API Key (Optional)"
+                  value={apiKey}
+                  onChange={handleApiKeyChange}
+                  className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-3 py-2 pr-10 text-xs text-white placeholder:text-zinc-600 focus:outline-none focus:border-sky-500/50 transition-colors"
+                />
+                {apiKey.length > 5 && (
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center space-x-1 text-emerald-400">
+                    <CheckCircle2 className="w-4 h-4" />
+                  </div>
+                )}
+              </div>
               <p className="text-[9px] text-zinc-500 leading-snug">
-                Without a key, the backend uses a placeholder key which may fail if the project isn't configured with environment variables. Your key is stored strictly in your browser&apos;s localStorage and sent securely to the Vercel backend.
+                {apiKey.length > 5 ? (
+                  <span className="text-emerald-400/80 font-medium">✓ Auto-saved securely to your browser. Scroll up and click 'Evaluate' to run the AI!</span>
+                ) : (
+                  "Without a key, the backend uses a placeholder key. Your key is stored strictly in your browser's localStorage and sent securely to the Vercel backend."
+                )}
               </p>
             </div>
           </div>
