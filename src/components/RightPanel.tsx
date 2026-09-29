@@ -23,7 +23,8 @@ import {
   Eye,
   ShieldCheck,
   Flame,
-  HelpCircle
+  HelpCircle,
+  Key
 } from 'lucide-react';
 import { InfoButton } from './InfoButton.tsx';
 
@@ -64,6 +65,16 @@ export const RightPanel: React.FC<RightPanelProps> = ({
   onCloseMobile
 }) => {
   const [isCardFlipped, setIsCardFlipped] = useState(false);
+  const [apiKey, setApiKey] = useState(() => {
+    if (typeof window !== 'undefined') return localStorage.getItem('gemini_api_key') || '';
+    return '';
+  });
+
+  const handleApiKeyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setApiKey(val);
+    localStorage.setItem('gemini_api_key', val);
+  };
 
   const containerClasses = `
     flex flex-col select-none transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]
@@ -557,6 +568,31 @@ export const RightPanel: React.FC<RightPanelProps> = ({
               </div>
             </div>
           </div>
+
+          {/* SECTION 5: GEMINI API KEY */}
+          <div className="space-y-3 pt-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-1.5 text-zinc-300 text-[10px] font-semibold uppercase tracking-wider">
+                <Key className="w-3.5 h-3.5 text-sky-400" />
+                <span>Google Gemini API Key</span>
+              </div>
+            </div>
+            <div className="flex flex-col space-y-2">
+              <input
+                type="password"
+                placeholder="AI Studio API Key (Optional)"
+                value={apiKey}
+                onChange={handleApiKeyChange}
+                className="w-full bg-white/[0.03] border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder:text-zinc-600 focus:outline-none focus:border-sky-500/50 transition-colors"
+              />
+              <p className="text-[9px] text-zinc-500 leading-snug">
+                Without a key, the backend uses a placeholder key which may fail if the project isn't configured with environment variables. Your key is stored strictly in your browser&apos;s localStorage and sent securely to the Vercel backend.
+              </p>
+            </div>
+          </div>
+
+          {/* Spacer for mobile safe area & dock */}
+          <div className="h-16 lg:hidden w-full"></div>
         </div>
       </aside>
     </>

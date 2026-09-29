@@ -614,8 +614,17 @@ app.post('/api/analyze', async (req: Request, res: Response) => {
 
   const systemInstruction = `You are a spacecraft operations analyst. Use ONLY the provided data. Do not invent numbers. Provide both professional aerospace analysis and a friendly, fun, intuitive 12-year-old explanation for flip-card display.`;
 
+  const customApiKey = req.headers['x-gemini-api-key'] as string | undefined;
+  let client = ai;
+  if (customApiKey && customApiKey !== '') {
+    client = new GoogleGenAI({
+      apiKey: customApiKey,
+      httpOptions: { headers: { 'User-Agent': 'aistudio-build' } }
+    });
+  }
+
   async function callGeminiOnce() {
-    const response = await ai.models.generateContent({
+    const response = await client.models.generateContent({
       model: GEMINI_MODEL,
       contents: prompt,
       config: {

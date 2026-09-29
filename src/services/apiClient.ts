@@ -171,12 +171,16 @@ export const apiClient = {
     }
   },
 
-  async analyzeSpacecraft(payload: any, force = false): Promise<AnalyzeResult> {
+  async analyzeSpacecraft(payload: any, force = false, customApiKey?: string): Promise<AnalyzeResult> {
     try {
       const url = force ? '/api/analyze?force=true' : '/api/analyze';
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      if (customApiKey) {
+        headers['x-gemini-api-key'] = customApiKey;
+      }
       const res = await fetch(url, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify(payload)
       });
       const data = await res.json();

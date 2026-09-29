@@ -386,7 +386,8 @@ export default function App() {
       scenario
     };
 
-    const res = await apiClient.analyzeSpacecraft(payload, force);
+    const customApiKey = localStorage.getItem('gemini_api_key') || undefined;
+    const res = await apiClient.analyzeSpacecraft(payload, force, customApiKey);
     setAiAnalysis(res);
     setIsAnalyzing(false);
   }, [selectedSatellite, spaceWeather, donkiCmes, donkiGst, scenario]);

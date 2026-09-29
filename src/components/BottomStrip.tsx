@@ -330,6 +330,8 @@ export const BottomStrip: React.FC<BottomStripProps> = ({
                 </div>
               </div>
             </div>
+            {/* Spacer for Mobile Apple Dock clearance */}
+            <div className="h-24 sm:hidden w-full"></div>
           </div>
         </>
       )}
