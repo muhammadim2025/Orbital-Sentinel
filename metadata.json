@@ -1,0 +1,7 @@
+{
+  "name": "ORBITAL SENTINEL",
+  "description": "AI mission-control and space situational awareness interpretation layer for spacecraft operators.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+

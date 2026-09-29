@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ORBITAL SENTINEL</title>
+    <meta name="description" content="AI mission-control and space situational awareness interpretation layer for spacecraft operators." />
+    <meta property="og:title" content="ORBITAL SENTINEL" />
+    <meta property="og:description" content="AI mission-control and space situational awareness interpretation layer for spacecraft operators." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Google Fonts for Apple & Ferrari sleek minimalism -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- CesiumJS from CDN (No Cesium Ion token required) -->
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.120/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <script>
+      window.CESIUM_BASE_URL = 'https://cesium.com/downloads/cesiumjs/releases/1.120/Build/Cesium/';
+    </script>
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.120/Build/Cesium/Cesium.js"></script>
+    <script>
+      if (typeof window !== 'undefined' && window.Cesium && window.Cesium.Ion) {
+        window.Cesium.Ion.defaultAccessToken = '';
+      }
+    </script>
+  </head>
+  <body class="bg-[#030305] text-zinc-100 overflow-hidden select-none antialiased font-sans">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
