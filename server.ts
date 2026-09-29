@@ -195,6 +195,13 @@ app.get('/api/donki', async (req: Request, res: Response) => {
     }
 
     const data = await response.json();
+    
+    // If the API returns an empty array (e.g., asking for future dates in simulated time)
+    // we should use the bundled fallback data to ensure the UI has something to show.
+    if (Array.isArray(data) && data.length === 0) {
+      throw new Error('NASA API returned empty data for the requested timeframe');
+    }
+
     setInCache(cacheKey, data, 900); // 15 minutes
     return res.json({
       data,
@@ -296,6 +303,11 @@ app.get('/api/neo', async (req: Request, res: Response) => {
     if (!response.ok) throw new Error(`NeoWs error: ${response.status}`);
 
     const data = await response.json();
+    
+    if (!data.near_earth_objects || Object.keys(data.near_earth_objects).length === 0) {
+      throw new Error('NeoWs returned empty data for the requested timeframe');
+    }
+
     setInCache(cacheKey, data, 3600); // 1 hour
     return res.json({
       data,
