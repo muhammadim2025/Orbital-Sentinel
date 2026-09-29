@@ -42,6 +42,7 @@ export default function App() {
   const [activeGroup, setActiveGroup] = useState<string>('stations');
   const [satellites, setSatellites] = useState<SpacecraftRecord[]>([]);
   const [debrisSatellites, setDebrisSatellites] = useState<SpacecraftRecord[]>([]);
+  const [stationSatellites, setStationSatellites] = useState<SpacecraftRecord[]>([]);
   const [selectedSatellite, setSelectedSatellite] = useState<SpacecraftRecord | null>(null);
 
   // Live Simulation Clock & Ephemeris
@@ -136,11 +137,14 @@ export default function App() {
     });
   }, []);
 
-  // Load initial groups and background debris
+  // Load active group
   useEffect(() => {
     loadSatellitesForGroup(activeGroup);
+  }, [activeGroup, loadSatellitesForGroup]);
 
-    // Pre-load debris catalog for conjunction screening
+  // Load initial static background catalogs (Debris & Stations)
+  useEffect(() => {
+    // Pre-load debris catalog for conjunction screening and visualization
     apiClient.fetchTle('cosmos-2251-debris').then(res1 => {
       apiClient.fetchTle('iridium-33-debris').then(res2 => {
         const combined = [...res1.data, ...res2.data]
@@ -149,7 +153,15 @@ export default function App() {
         setDebrisSatellites(combined);
       });
     });
-  }, [activeGroup, loadSatellitesForGroup]);
+    
+    // Pre-load stations so they are always visible as Gold markers
+    apiClient.fetchTle('stations').then(res => {
+      const parsed = res.data
+        .map(item => parseCelesTrakRecord(item, 'stations'))
+        .filter((s): s is SpacecraftRecord => s !== null);
+      setStationSatellites(parsed);
+    });
+  }, []);
 
   // Load Space Weather & Environmental Feeds
   const loadEnvironmentalFeeds = useCallback(async (isSolarStormScenario: boolean) => {
@@ -489,7 +501,7 @@ export default function App() {
         {/* Center 3D Cesium Globe Viewport */}
         <main className="flex-1 relative h-full overflow-hidden">
           <CesiumGlobe
-            satellites={satellites}
+            satellites={Array.from(new Map([...satellites, ...debrisSatellites, ...stationSatellites].map(s => [s.noradId, s])).values())}
             selectedSatellite={selectedSatellite}
             onSelectSatellite={setSelectedSatellite}
             scenario={scenario}
@@ -553,7 +565,7 @@ export default function App() {
       />
 
       {/* Mobile Floating Apple Navigation Dock */}
-      <div className="md:hidden fixed bottom-3 inset-x-0 pb-safe z-40 flex justify-center pointer-events-none">
+      <div className="md:hidden fixed bottom-3 inset-x-0 pb-safe z-60 flex justify-center pointer-events-none">
         <nav className="pointer-events-auto flex items-center p-1 rounded-full bg-zinc-950/85 border border-white/10 backdrop-blur-2xl shadow-2xl">
           <button
             onClick={() => setMobileView('globe')}
