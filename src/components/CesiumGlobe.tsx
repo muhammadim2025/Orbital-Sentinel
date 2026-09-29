@@ -743,35 +743,26 @@ export const CesiumGlobe: React.FC<CesiumGlobeProps> = ({
         </div>
       </div>
 
-      {/* Orbital Color Legend */}
-      <div className="absolute top-2 left-2 right-2 sm:left-auto sm:right-4 sm:top-4 z-20 bg-black/85 border border-white/10 backdrop-blur-2xl rounded-2xl px-4 py-3 shadow-2xl flex flex-col gap-2.5 max-w-sm pointer-events-auto transition-opacity">
-        <div className="flex justify-between items-center mb-1">
-          <span className="text-xs font-semibold text-zinc-100 tracking-wide uppercase">Orbital Legend</span>
-          <span className="text-[10px] text-zinc-500 font-mono">{satellites.length} FOV</span>
+      {/* Orbital Color Legend (Compact) */}
+      <div className="absolute top-2 left-2 right-2 sm:left-auto sm:right-4 sm:top-4 z-20 bg-black/85 border border-white/10 backdrop-blur-2xl rounded-2xl sm:rounded-full px-3 py-1.5 shadow-2xl flex flex-wrap sm:flex-nowrap items-center justify-center sm:justify-start gap-2.5 sm:gap-4 pointer-events-auto text-[10px] sm:text-xs">
+        <div className="flex items-center space-x-1.5">
+          <span className="text-zinc-500 font-mono tracking-wide uppercase mr-1 hidden sm:inline">Legend</span>
+          <span className="w-2 h-2 rounded-full bg-yellow-400 shadow-[0_0_8px_#facc15]" />
+          <span className="text-zinc-200 font-medium">Stations</span>
+        </div>
+        
+        <div className="flex items-center space-x-1.5">
+          <span className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]" />
+          <span className="text-zinc-200 font-medium">Active</span>
         </div>
 
-        <div className="flex flex-col gap-0.5">
-          <div className="flex items-center space-x-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-yellow-400 shadow-[0_0_8px_#facc15]" />
-            <span className="text-sm text-yellow-400 font-semibold tracking-tight">Gold — Space Stations</span>
-          </div>
-          <span className="text-[11px] text-zinc-400 pl-4.5 leading-snug">ISS, Tiangong and other major stations.</span>
+        <div className="flex items-center space-x-1.5">
+          <span className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_8px_#ef4444]" />
+          <span className="text-zinc-200 font-medium">Debris</span>
         </div>
 
-        <div className="flex flex-col gap-0.5 mt-1">
-          <div className="flex items-center space-x-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]" />
-            <span className="text-sm text-cyan-400 font-semibold tracking-tight">Cyan — Active Satellites</span>
-          </div>
-          <span className="text-[11px] text-zinc-400 pl-4.5 leading-snug">Starlink, GPS, weather and scientific satellites.</span>
-        </div>
-
-        <div className="flex flex-col gap-0.5 mt-1">
-          <div className="flex items-center space-x-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_8px_#ef4444]" />
-            <span className="text-sm text-red-500 font-semibold tracking-tight">Red — Orbital Debris</span>
-          </div>
-          <span className="text-[11px] text-zinc-400 pl-4.5 leading-snug">Cosmos 2251, Iridium 33 and other dangerous debris.</span>
+        <div className="hidden sm:flex items-center space-x-1.5 pl-2 border-l border-white/10">
+          <span className="text-zinc-400 font-mono">{satellites.length} FOV</span>
         </div>
       </div>
 

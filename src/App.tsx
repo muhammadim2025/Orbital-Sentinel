@@ -39,7 +39,7 @@ export default function App() {
   const [scenario, setScenario] = useState<'normal' | 'solar_storm' | 'conjunction'>('normal');
 
   // Spacecraft Groups & Catalogs
-  const [activeGroup, setActiveGroup] = useState<string>('stations');
+  const [activeGroup, setActiveGroup] = useState<string>('gps-ops');
   const [satellites, setSatellites] = useState<SpacecraftRecord[]>([]);
   const [debrisSatellites, setDebrisSatellites] = useState<SpacecraftRecord[]>([]);
   const [stationSatellites, setStationSatellites] = useState<SpacecraftRecord[]>([]);
